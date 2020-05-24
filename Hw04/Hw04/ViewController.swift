@@ -99,7 +99,7 @@ class ViewController: UIViewController {
         videoView.layer.addSublayer(playerLayer)
     }
     
-    func nextMovie() {
+    @objc func playerItemDidReachEnd(noification: Notification) {
         // 0:Cycle(Default) 1:SingleCycle 2:Random
         switch(playMode) {
         case 0:
@@ -121,10 +121,6 @@ class ViewController: UIViewController {
             break;
         }
         playNewItem(movies[count])
-    }
-    
-    @objc func playerItemDidReachEnd(noification: Notification) {
-        nextMovie()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -169,7 +165,27 @@ class ViewController: UIViewController {
     }
     
     @IBAction func next(_ sender: UIButton) {
-        nextMovie()
+        // 0:Cycle(Default) 1:SingleCycle 2:Random
+        switch(playMode) {
+        case 0:
+            count = count<movies.count-1 ? count+1 : 0
+            break;
+        case 1:
+            count = count<movies.count-1 ? count+1 : 0
+            break;
+        case 2:
+            if(movies.count>1) {
+                var rnd = count
+                while(rnd == count){
+                    rnd = Int.random(in: 0..<movies.count)
+                }
+                count = rnd
+            }
+            break;
+        default:
+            break;
+        }
+        playNewItem(movies[count])
     }
     
     @IBAction func back5sec(_ sender: UIButton) {
